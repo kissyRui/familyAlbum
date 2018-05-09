@@ -1,0 +1,29 @@
+{
+  "name": "family_album",
+  "version": "1.0.0",
+  "description": "家庭相册",
+  "main": "app.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kissyRui/familyAlbum.git"
+  },
+  "keywords": [
+    "koa"
+  ],
+  "author": "liyongliang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kissyRui/familyAlbum/issues"
+  },
+  "homepage": "https://github.com/kissyRui/familyAlbum#readme",
+  "dependencies": {
+    "fs.promised": "^3.0.0",
+    "koa": "^2.5.1",
+    "koa-compose": "^4.0.0",
+    "koa-route": "^3.2.0",
+    "koa-static": "^4.0.2"
+  }
+}
