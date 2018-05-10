@@ -1,20 +1,39 @@
 const fs = require('fs.promised');
 const path = require('path');
-const route = require('koa-route');
+const Koa = require('koa');
 const compose = require('koa-compose');
 const serve = require('koa-static');
-const Koa = require('koa');
+const bodyParser = require('koa-bodyparser');
+const nunjucks = require('nunjucks');
+const views = require('koa-views');
+const proxy = require('./middlewares/proxy');
+// const Router = require('koa-router');
+
+const routers = require('./routers/index')
+
 const app = new Koa();
+// const router = new Router();
 
-const main = async (ctx, next) => {
-    ctx.response.type = 'html';
-    ctx.response.body = await fs.readFile('./demos/template.html', 'utf8');
-};
+app.use(bodyParser());
 
-const about = ctx => {
-    ctx.response.type = 'html';
-    ctx.response.body = '<a href="/">首页</a>';
-};
+// 配置api
+app.use(proxy(app, {
+    github_api: 'https://api.github.com/',
+    github: 'https://github.com/',
+    local: 'http://127.0.0.1:3000/',
+    baidu: 'https://www.baidu.com/'
+}, {
+    allowShowApi: true,
+    timeout: 15000 // 接口超时时间
+}));
+
+nunjucks.configure('views', { autoescape: true });
+
+app.use(views(__dirname + '/views', {
+    map: {
+        html: 'nunjucks'
+    }
+}));
 
 const logger = async (ctx, next) => {
     console.log(`${Date.now()} ${ctx.request.method} ${ctx.request.url}`);
@@ -23,14 +42,11 @@ const logger = async (ctx, next) => {
 
 const staticServe = serve(path.join(__dirname, 'static'));
 
-// const middlewares = compose([logger, route.get('/', main), route.get('/about', about)]);
-// app.use(middlewares);
-
-
 app.use(logger);
 app.use(staticServe);
-app.use(route.get('/', main));
-app.use(route.get('/about', about));
 
-app.listen(80);
+app.use(routers.routes());
+app.use(routers.allowedMethods());
+
+app.listen(3000);
 

@@ -1,20 +1,8 @@
-<!doctype html>
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>登录</title>
-    <!-- Bootstrap core CSS -->
-    <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+{% extends "./common/layout.html" %}
+{% block content %}
     <div class="container">
         <div class="row">
-
-            <h1 class="text-center">登录</h1>
-
+            <h1 class="text-center">{{url}}</h1>
             <form id="JForm" class="form-horizontal" method="POST" action="/user/api/authenticate" autocomplete="off">
                 <div class="form-group form-group-lg">
                     <label for="exampleInputEmail1" class="col-sm-2 control-label">电子邮箱</label>
@@ -33,12 +21,7 @@
                         <button id="JSubmit" type="button" class="btn btn-default btn-lg">登录</button>
                     </div>
                 </div>
-
             </form>
-
         </div>
     </div>
-
-</body>
-
-</html>
+{% endblock %}
