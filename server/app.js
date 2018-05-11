@@ -2,7 +2,7 @@ const fs = require('fs.promised');
 const path = require('path');
 const Koa = require('koa');
 const compose = require('koa-compose');
-const serve = require('koa-static');
+const koaStatic = require('koa-static');
 const bodyParser = require('koa-bodyparser');
 const nunjucks = require('nunjucks');
 const views = require('koa-views');
@@ -27,8 +27,7 @@ app.use(proxy(app, {
     timeout: 15000 // 接口超时时间
 }));
 
-nunjucks.configure('views', { autoescape: true });
-
+nunjucks.configure(__dirname + '/views', { autoescape: true });
 app.use(views(__dirname + '/views', {
     map: {
         html: 'nunjucks'
@@ -40,10 +39,8 @@ const logger = async (ctx, next) => {
     await next();
 }
 
-const staticServe = serve(path.join(__dirname, 'static'));
-
 app.use(logger);
-app.use(staticServe);
+app.use(koaStatic(path.join(__dirname, './../static')));
 
 app.use(routers.routes());
 app.use(routers.allowedMethods());
